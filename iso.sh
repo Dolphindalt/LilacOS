@@ -6,10 +6,10 @@ mkdir -p isodir
 mkdir -p isodir/boot
 mkdir -p isodir/boot/grub
 
-cp sysroot/boot/myos.kernel isodir/boot/myos.kernel
+cp sysroot/boot/lilac.kernel isodir/boot/lilac.kernel
 cat > isodir/boot/grub/grub.cfg << EOF
-menuentry "myos" {
-	multiboot /boot/myos.kernel
+menuentry "lilac" {
+	multiboot /boot/lilac.kernel
 }
 EOF
-grub-mkrescue -o myos.iso isodir
+grub-mkrescue -o lilac.iso isodir
