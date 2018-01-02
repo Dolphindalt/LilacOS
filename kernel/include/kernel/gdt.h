@@ -3,30 +3,34 @@
 
 #include <stdint.h>
 
-struct SegmentDescriptor {
-    uint16_t limit_lo;
-    uint16_t base_lo;
-    uint8_t base_hi;
-    uint8_t type;
-    uint8_t flags_limit_hi;
-    uint8_t base_vhi;
+/*
+    Representation of a segment in a segment register.
+    Attribute packed stops the compiler from optmizing the memory.
+*/
+struct gdt_entry {
+    uint16_t limit_low;
+    uint16_t base_low;
+    uint8_t base_middle;
+    uint8_t access;
+    uint8_t granularity;
+    uint8_t base_high;
 } __attribute__((packed));
 
-struct GlobalDescriptorTable {
-    struct SegmentDescriptor NullSegmentSelector;
-    struct SegmentDescriptor UnusedSegmentSelector;
-    struct SegmentDescriptor CodeSegmentSelector;
-    struct SegmentDescriptor DataSegmentSelector;
-};
+/*
+    The limit is the max amount of bytes -1 to be taken up by the GDT.
+*/
+struct gdt_ptr {
+    uint16_t limit;
+    uint32_t base;
+} __attribute__((packed));
 
-struct GlobalDescriptorTable gdt;
+/*
+    Invoked in boot.S to reload segment registers.
+*/
+extern void _gdt_flush();
 
-void globalDescriptorTableInit();
-void segmentDescriptorInit(struct SegmentDescriptor *sd, uint32_t base, uint32_t limit, uint8_t flags);
-uint32_t base(struct SegmentDescriptor *);
-uint32_t limit(struct SegmentDescriptor *);
+void gdt_set_segment(int n, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran);
 
-uint16_t codeSegmentSelector(struct GlobalDescriptorTable gdt);
-uint16_t dataSegmentSelector(struct GlobalDescriptorTable gdt);
+void gdt_init();
 
 #endif

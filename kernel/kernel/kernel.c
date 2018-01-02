@@ -4,7 +4,7 @@
 #include<kernel/gdt.h>
 
 void kernel_main(void) {
-	globalDescriptorTableInit();
+	gdt_init();
 	terminal_initialize();
 	printf("Hello, kernel World!\n");
 }
