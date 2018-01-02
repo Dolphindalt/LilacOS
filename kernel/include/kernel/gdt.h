@@ -29,8 +29,14 @@ struct gdt_ptr {
 */
 extern void _gdt_flush();
 
+/*
+    Set the data in a segment register to be flushed to the GDT table.
+*/
 void gdt_set_segment(int n, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran);
 
+/*
+    Intended to be called by kernel_main. Sets up GDT table and segment registers.
+*/
 void gdt_init();
 
 #endif

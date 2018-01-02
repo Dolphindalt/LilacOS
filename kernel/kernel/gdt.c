@@ -1,8 +1,8 @@
 #include <kernel/gdt.h>
 
-#include <kernel/system.h>
+#include <kernel/port.h>
 
-struct gdt_entry gdt[4];
+struct gdt_entry gdt[4]; // literal gdt
 struct gdt_ptr _gp;
 
 void gdt_set_segment(int n, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran)

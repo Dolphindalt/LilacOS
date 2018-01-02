@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include <kernel/tty.h>
-#include <kernel/system.h>
+#include <kernel/port.h>
 #include <kernel/ssp.h>
 
 #include "vga.h"
@@ -39,10 +39,10 @@ void terminal_updatecursor()
 {
     unsigned temp;
     temp = terminal_column + VGA_WIDTH * terminal_row;
-    outb(0x3D4, 14);
-    outb(0x3D5, temp >> 8);
-    outb(0x3D4, 15);
-    outb(0x3D5, temp);
+    port16_write(14, 0x3D4);
+    port16_write(temp >> 8, 0x3D5);
+    port16_write(15, 0x3D4);
+    port16_write(temp, 0x3D5);
 }
 
 void terminal_clearline(uint8_t from, uint8_t to)
