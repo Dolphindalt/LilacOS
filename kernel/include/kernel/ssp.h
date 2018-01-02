@@ -1,6 +1,10 @@
 #ifndef SSP_H
 #define SSP_H 1
 
+/**
+ * Stack Smash Protector
+ */
+
 #include <stdint.h>
 #include <stdlib.h>
  
