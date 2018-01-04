@@ -30,6 +30,11 @@ struct gdt_ptr {
 extern void _gdt_flush();
 
 /*
+    Get the memory address value from a data segment in the gdt.
+*/
+uint16_t gdt_get_segment(uint8_t seg_num);
+
+/*
     Set the data in a segment register to be flushed to the GDT table.
 */
 void gdt_set_segment(int n, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran);

@@ -2,7 +2,7 @@
 
 #include <kernel/port.h>
 
-struct gdt_entry gdt[4]; // literal gdt
+struct gdt_entry gdt[3]; // literal gdt representation
 struct gdt_ptr _gp;
 
 void gdt_set_segment(int n, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran)
@@ -16,15 +16,19 @@ void gdt_set_segment(int n, uint64_t base, uint64_t limit, uint8_t access, uint8
     gdt[n].access = access;
 }
 
+uint16_t gdt_get_segment(uint8_t seg_num)
+{
+    return (uint8_t *)&seg_num - (uint8_t *)&gdt;
+}
+
 void gdt_init()
 {
-    _gp.limit = (sizeof(struct gdt_entry) * 6) - 1;
+    _gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
     _gp.base = (address)&gdt;
 
     gdt_set_segment(0, 0, 0, 0, 0); // NULL
-    gdt_set_segment(0, 0, 0, 0, 0); // UNUSED
     gdt_set_segment(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // CODE
     gdt_set_segment(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // DATA
 
-    _gdt_flush();
+    _gdt_flush(); //boot.S
 }
