@@ -25,6 +25,7 @@ void __stack_chk_fail(void)
 #elif __is_lilac_kernel
 	panic("Stack smashing detected");
 #endif
+abort();
 }
 
 #endif
