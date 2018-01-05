@@ -37,16 +37,3 @@ _start:
 1:	hlt
 	jmp 1b
 .size _start, . - _start
-
-.global _gdt_flush
-.extern _gp
-_gdt_flush:
-	lgdt _gp
-	mov $0x10, %ax
-	mov %ax, %ds
-	mov %ax, %es
-	mov %ax, %fs
-	mov %ax, %gs
-	mov %ax, %ss
-	jmp 0x08
-	ret

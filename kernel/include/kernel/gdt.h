@@ -1,12 +1,27 @@
 #ifndef GDT_H
-#define GDT_H 1
+#define GDT_H
 
 #include <stdint.h>
 
-/*
-    Representation of a segment in a segment register.
-    Attribute packed stops the compiler from optmizing the memory.
-*/
+/* PIC Commands */
+#define PIC1_CMD        0x20
+#define PIC1_DATA       0x21
+#define PIC2_CMD        0xA0
+#define PIC2_DATA       0xA1
+#define PIC_READ_IRR    0x0a	/* OCW3 irq ready next CMD read */
+#define PIC_READ_ISR    0x0b	/* OCW3 irq service next CMD read */
+#define ICW1_ICW4	0x01	/* ICW4 (not) needed */
+#define ICW1_SINGLE	0x02	/* Single (cascade) mode */
+#define ICW1_INTERVAL4	0x04	/* Call address interval 4 (8) */
+#define ICW1_LEVEL	0x08	/* Level triggered (edge) mode */
+#define ICW1_INIT	0x10	/* Initialization - required! */
+
+#define ICW4_8086	0x01	/* 8086/88 (MCS-80/85) mode */
+#define ICW4_AUTO	0x02	/* Auto (normal) EOI */
+#define ICW4_BUF_SLAVE	0x08	/* Buffered mode/slave */
+#define ICW4_BUF_MASTER	0x0C	/* Buffered mode/master */
+#define ICW4_SFNM	0x10	/* Special fully nested (not) */
+
 struct gdt_entry {
     uint16_t limit_low;
     uint16_t base_low;
@@ -15,33 +30,23 @@ struct gdt_entry {
     uint8_t granularity;
     uint8_t base_high;
 } __attribute__((packed));
+typedef struct gdt_entry gdt_entry_t;
 
-/*
-    The limit is the max amount of bytes -1 to be taken up by the GDT.
-*/
-struct gdt_ptr {
+struct idt_entry {
+    uint16_t base_low;
+    uint16_t selector;
+    uint8_t reserved;
+    uint8_t flags;
+    uint16_t base_high;
+} __attribute__((packed));
+typedef struct idt_entry idt_entry_t;
+
+struct descriptor_ptr {
     uint16_t limit;
     uint32_t base;
 } __attribute__((packed));
+typedef struct descriptor_ptr descriptor_ptr_t;
 
-/*
-    Invoked in boot.S to reload segment registers.
-*/
-extern void _gdt_flush();
-
-/*
-    Get the memory address value from a data segment in the gdt.
-*/
-uint16_t gdt_get_segment(uint8_t seg_num);
-
-/*
-    Set the data in a segment register to be flushed to the GDT table.
-*/
-void gdt_set_segment(int n, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran);
-
-/*
-    Intended to be called by kernel_main. Sets up GDT table and segment registers.
-*/
-void gdt_init();
+void descriptor_tables_init();
 
 #endif

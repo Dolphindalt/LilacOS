@@ -2,17 +2,23 @@
 
 #include <kernel/tty.h>
 #include <kernel/gdt.h>
-#include <kernel/interrupts.h>
+#include <kernel/isr.h>
+#include <kernel/port.h>
 
-void kernel_main(void) {
+void kernel_main()
+{
+	disable_interrupts();
 	terminal_initialize();
-	gdt_init();
-	interrupts_init(0x20);
+	descriptor_tables_init();
+	interrupts_init();
 
-	
+	enable_interrupts();
 
-	interrupts_activate();
+	asm("int $0x03");
+	asm("int $0x04");
 
 	printf("Hello, kernel World!\n");
 	printf("Hello, kernel World!\n");
+
+	while(1);
 }
