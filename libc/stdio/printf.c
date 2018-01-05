@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 static bool print(const char* data, size_t length) {
 	const unsigned char* bytes = (const unsigned char*) data;
@@ -59,6 +60,31 @@ int printf(const char* restrict format, ...) {
 				return -1;
 			}
 			if (!print(str, len))
+				return -1;
+			written += len;
+		}
+		else if (*format == 'd') {
+			format++;
+			int32_t a = va_arg(parameters, int32_t);
+			char v[34] = "";
+			if(s32tostr(v, 34, a, 10) < 0)
+				return -1;
+			size_t len = strlen(v);
+			if(maxrem < len)
+				return -1;
+			if(!print(v, len))
+				return -1;
+			written += len;
+		} else if (*format == 'u') {
+			format++;
+			uint32_t a = va_arg(parameters, uint32_t);
+			char v[34] = "";
+			if(u32tostr(v, 34, a, 10) < 0)
+				return -1;
+			size_t len = strlen(v);
+			if(maxrem < len)
+				return -1;
+			if(!print(v, len))
 				return -1;
 			written += len;
 		} else {
