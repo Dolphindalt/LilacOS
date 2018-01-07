@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 typedef enum {
+	PME_13 = 13,
 	IRQ_0 = 32,
 	IRQ_1 = 33,
 	IRQ_2 = 34,

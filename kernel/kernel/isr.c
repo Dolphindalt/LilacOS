@@ -1,7 +1,6 @@
 #include <kernel/isr.h>
 
 #include <kernel/port.h>
-#include <stdio.h>
 
 isr_t interrupt_handlers[256];
 
@@ -20,7 +19,7 @@ void trap(registers_t *regs)
     if(interrupt_handlers[regs->interrupt_number])
     {
         isr_t handler = interrupt_handlers[regs->interrupt_number];
-        handler(regs);
+        handler(&regs);
     }
 }
 
@@ -35,7 +34,7 @@ void register_interrupt_handler(uint8_t n, isr_t handler)
     interrupt_handlers[n] = handler;
 }
 
-void do_nothing(registers_t * regs)
+void do_nothing(registers_t *regs)
 {
-	printf("Detected interrupt: %u\n", regs->interrupt_number);
+	
 }

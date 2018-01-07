@@ -34,7 +34,10 @@ stdio/printf.o \
 stdio/putchar.o \
 stdio/puts.o \
 stdlib/abort.o \
+stdlib/panic.o \
 stdlib/atoi.o \
+stdlib/malloc.o \
+stdlib/orderedarray.o \
 string/reverse.o \
 string/memcmp.o \
 string/memcpy.o \

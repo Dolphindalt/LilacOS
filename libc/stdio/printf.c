@@ -5,7 +5,8 @@
 #include <string.h>
 #include <stdint.h>
 
-static bool print(const char* data, size_t length) {
+static bool print(const char* data, size_t length) 
+{
 	const unsigned char* bytes = (const unsigned char*) data;
 	for (size_t i = 0; i < length; i++)
 		if (putchar(bytes[i]) == EOF)
@@ -13,7 +14,8 @@ static bool print(const char* data, size_t length) {
 	return true;
 }
 
-int printf(const char* restrict format, ...) {
+int printf(const char* restrict format, ...) 
+{
 	va_list parameters;
 	va_start(parameters, format);
 
@@ -41,21 +43,26 @@ int printf(const char* restrict format, ...) {
 
 		const char* format_begun_at = format++;
 
-		if (*format == 'c') {
+		if (*format == 'c') 
+		{
 			format++;
 			char c = (char) va_arg(parameters, int /* char promotes to int */);
-			if (!maxrem) {
+			if (!maxrem) 
+			{
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
 			}
 			if (!print(&c, sizeof(c)))
 				return -1;
 			written++;
-		} else if (*format == 's') {
+		} 
+		else if (*format == 's') 
+		{
 			format++;
 			const char* str = va_arg(parameters, const char*);
 			size_t len = strlen(str);
-			if (maxrem < len) {
+			if (maxrem < len) 
+			{
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
 			}
@@ -63,7 +70,8 @@ int printf(const char* restrict format, ...) {
 				return -1;
 			written += len;
 		}
-		else if (*format == 'd') {
+		else if (*format == 'd') 
+		{
 			format++;
 			int32_t a = va_arg(parameters, int32_t);
 			char v[34] = "";
@@ -75,7 +83,9 @@ int printf(const char* restrict format, ...) {
 			if(!print(v, len))
 				return -1;
 			written += len;
-		} else if (*format == 'u') {
+		} 
+		else if (*format == 'u') 
+		{
 			format++;
 			uint32_t a = va_arg(parameters, uint32_t);
 			char v[34] = "";
@@ -90,7 +100,8 @@ int printf(const char* restrict format, ...) {
 		} else {
 			format = format_begun_at;
 			size_t len = strlen(format);
-			if (maxrem < len) {
+			if (maxrem < len) 
+			{
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
 			}

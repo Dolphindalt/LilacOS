@@ -77,7 +77,7 @@ static void idt_setgate(uint8_t num, uint32_t base, uint16_t selector, uint8_t f
 
 	idt_entries[num].selector = selector;
 	idt_entries[num].reserved = 0;
-	idt_entries[num].flags = flags /* @todo "| 0x60" for user mode */ ;
+	idt_entries[num].flags = flags | 0x60;
 }
 
 void PIC_remap(int master_offset, int slave_offset)

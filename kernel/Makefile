@@ -32,6 +32,8 @@ $(KERNEL_ARCH_OBJS) \
 kernel/kernel.o \
 kernel/gdt.o \
 kernel/isr.o \
+kernel/timer.o \
+kernel/paging.o \
 
 OBJS=\
 $(ARCHDIR)/crti.o \
